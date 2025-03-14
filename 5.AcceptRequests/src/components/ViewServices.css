@@ -1,0 +1,49 @@
+.view-services-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .service-image {
+    max-width: 100%;
+    height: auto;
+    width: 400px; /* Set a large size for the image */
+  }
+  
+  .table-container {
+    flex: 1;
+    margin-left: 20px;
+    margin-right: 40px;
+  }
+  
+  .table {
+    width: 100% !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    /* --bs-body-bg: #5600E8;
+    --bs-border-color:black; */ 
+  }
+  
+  /* Table header and body colors */
+  .thead {
+    background-color: #5600E8 !important; /* Header color */
+    color: white !important;
+  }
+  
+  .table tbody {
+    background-color: #f4eefa !important; /* Body color */
+  }
+  
+  .table td, .table th {
+    vertical-align: middle !important;
+    padding: 15px !important;
+    text-align: center !important;
+  }
+  
