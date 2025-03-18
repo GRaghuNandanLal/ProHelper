@@ -1,0 +1,31 @@
+.worker-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.worker-table th, .worker-table td {
+  padding: 12px 15px; /* Increased padding for better spacing */
+  border: 1px solid black; /* Add black borders to table cells */
+}
+
+.worker-table th {
+  font-weight: bold;
+  color: white; /* Ensures header text is white */
+}
+
+.worker-table tbody {
+  background-color: #f2e7fe; /* Background color for table body */
+}
+
+.worker-table tbody tr:nth-child(even) {
+  background-color: #e7dff1; /* Optional: lighter shade for even rows */
+}
+
+.worker-table tbody tr:hover {
+  background-color: #d1c4e9; /* Changes background color on hover for better interactivity */
+}
+
+/* Optional: If you want additional styling */
+h1 {
+  margin: 20px 0; /* Reduced space above and below the heading */
+}
