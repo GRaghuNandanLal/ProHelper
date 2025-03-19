@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Header from "./components/Header";
-import Register from "./components/Register"; // Import Register
-import ClientHome from "./components/ClientHome"; // Import ClientHome
-import WorkerHome from "./components/WorkerHome"; // Import WorkerHome
-import ViewWorker from "./components/ViewWorker"; // Import ViewWorker
-import ViewServices from "./components/ViewServices"; // Import ViewServices
+import Register from "./components/Register";
+import ClientHome from "./components/ClientHome";
+import WorkerHome from "./components/WorkerHome";
+import ViewWorker from "./components/ViewWorker";
+import ViewServices from "./components/ViewServices";
 import ClientService from "./components/ClientService";
 import ClientRequest from "./components/ClientRequest";
 import WorkerRequest from "./components/WorkerRequest";
@@ -19,13 +19,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import ClientMeeting from "./components/ClientMeeting";
 import Rating from "./components/Rating";
 import WorkerHistory from "./components/WorkerHistory";
-import AdminHome from "./components/AdminHome";
-import AdminClient from "./components/AdminClient";
-import AdminWorker from "./components/AdminWorker";
-import AdminBooking from "./components/AdminBooking";
-import Query from "./components/Query";
-import AdminQuerys from "./components/AdminQuerys";
-import Edit from "./components/edit";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "react-bootstrap";
 import "./App.css";
