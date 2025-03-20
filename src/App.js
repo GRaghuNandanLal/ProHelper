@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Register from "./components/Register";
 import ClientHome from "./components/ClientHome";
 import WorkerHome from "./components/WorkerHome";
+import Edit from "./components/edit";
 import ViewWorker from "./components/ViewWorker";
 import ViewServices from "./components/ViewServices";
 import ClientService from "./components/ClientService";
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/worker-meeting" element={<WorkerMeeting />} />
         <Route path="/worker-reviews" element={<ViewReviews />} />
         <Route path="/worker-history" element={<WorkerHistory />} />
+        <Route path="/edit" element={<Edit />} />
         <Route
           path="/forgot-password"
           element={<div>Forgot Password Page</div>}

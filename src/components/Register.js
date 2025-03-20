@@ -35,9 +35,35 @@ const Signup = () => {
     fetchServices();
   }, []);
 
+  // Password Validation Function
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  // Contact Validation Function (Only 10 digits)
+  const validateContact = (contact) => {
+    const contactRegex = /^[0-9]{10}$/;
+    return contactRegex.test(contact);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    // Check password validation
+    if (!validatePassword(password)) {
+      setError(
+        "Password must be at least 8 characters long, contain at least 1 uppercase and 1 lowercase letter."
+      );
+      return;
+    }
+
+    // Check contact validation
+    if (!validateContact(contact)) {
+      setError("Contact number must be exactly 10 digits.");
+      return;
+    }
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -111,16 +137,23 @@ const Signup = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <small className="text-muted">
+              Password must be at least 8 characters, contain 1 uppercase and 1
+              lowercase letter.
+            </small>
           </div>
           <div className="form-group mb-3">
             <label>Contact</label>
             <input
-              type="text"
+              type="number"
               className="form-control"
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               required
             />
+            <small className="text-muted">
+              Contact number must be exactly 10 digits.
+            </small>
           </div>
           <div className="form-group mb-3">
             <label>Address</label>
@@ -167,7 +200,7 @@ const Signup = () => {
               </div>
               <button
                 type="button"
-                className="btn btn-secondary mb-3 "
+                className="btn btn-secondary mb-3"
                 onClick={handleAddService}
               >
                 Add Service
