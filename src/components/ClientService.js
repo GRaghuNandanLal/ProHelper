@@ -57,16 +57,22 @@ const ClientService = () => {
       <div className="container">
         <div className="d-flex justify-content-end">
           <button
-            className="btn custom-btn mb-3 mt-3"
+            className="mb-3 mt-3"
+            style={{ backgroundColor: "#5E11A2", color: "white" }}
             onClick={() => navigate("/client-request")}
           >
             Raise Request
           </button>
         </div>
-        <div className="d-flex flex-column justify-content-center align-items-center mt-5">
-          No Requests Available!
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <img
+            src={norequest}
+            alt="No Requests"
+            style={{ width: "300px", height: "300px" }}
+          />
           <button
-            className="btn custom-btn w-25 mt-5"
+            className="mb-3 mt-3"
+            style={{ backgroundColor: "#5E11A2", color: "white" }}
             onClick={() => navigate("/client-home")}
           >
             Back
@@ -80,7 +86,8 @@ const ClientService = () => {
     <div className="container">
       <div className="d-flex justify-content-end">
         <button
-          className="btn custom-btn mb-3 mt-3"
+          className="btn mb-3 mt-3"
+          style={{ backgroundColor: "#5E11A2", color: "white" }}
           onClick={() => navigate("/client-request")}
         >
           Raise Request
@@ -105,6 +112,9 @@ const ClientService = () => {
             <th style={{ backgroundColor: "#5E11A2", color: "white" }}>
               Status
             </th>
+            <th style={{ backgroundColor: "#5E11A2", color: "white" }}>
+              Meeting
+            </th>
             <th style={{ backgroundColor: "#5E11A2", color: "white" }}>Rate</th>
           </tr>
         </thead>
@@ -125,6 +135,13 @@ const ClientService = () => {
               </td>
               <td style={{ backgroundColor: "#f2e7fe", color: "black" }}>
                 {booking.status}
+              </td>
+              <td style={{ backgroundColor: "#f2e7fe", color: "black" }}>
+                <i
+                  className="bi bi-calendar-date"
+                  onClick={() => handleShowMeeting(booking)}
+                  style={{ cursor: "pointer" }}
+                />
               </td>
               <td style={{ backgroundColor: "#f2e7fe", color: "black" }}>
                 {booking.status === "Pending" ||
@@ -155,7 +172,8 @@ const ClientService = () => {
 
       <div className="d-flex justify-content-center">
         <button
-          className="btn custom-btn w-25 mb-3 mt-3"
+          className="btn mb-3 mt-3"
+          style={{ backgroundColor: "#5E11A2", color: "white" }}
           onClick={() => navigate("/client-home")}
         >
           Back
@@ -188,7 +206,7 @@ const ClientService = () => {
                     </div>
                   ))
                 ) : (
-                  <p style={{ color: "#30009c", fontWeight: "bold" }}>
+                  <p style={{ color: "#5E11A2", fontWeight: "bold" }}>
                     No meeting scheduled
                   </p>
                 )}

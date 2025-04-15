@@ -18,6 +18,7 @@ const ClientRequest = ({
   const [selectedWorkerId, setSelectedWorkerId] = useState(null);
   const [error, setError] = useState("");
   const [showWorkers, setShowWorkers] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(""); // Added for search filter
   const navigate = useNavigate();
 
   // Fetch services from Firestore
@@ -49,7 +50,7 @@ const ClientRequest = ({
     );
 
     setWorkers(filteredWorkers);
-    setShowWorkers(filteredWorkers.length > 0); // Show workers only if found
+    setShowWorkers(filteredWorkers.length > 0);
     setError(filteredWorkers.length === 0 ? "No workers yet to appoint." : "");
   };
 
@@ -61,7 +62,6 @@ const ClientRequest = ({
       return;
     }
 
-    // Find the selected worker in the workers array
     const selectedWorker = workers.find(
       (worker) => worker.id === selectedWorkerId
     );
@@ -73,7 +73,6 @@ const ClientRequest = ({
 
     const storedUserData = JSON.parse(sessionStorage.getItem("userData"));
 
-    // Prepare booking data
     const bookingData = {
       cname: storedUserData.name,
       cid: storedUserData.id,
@@ -90,12 +89,9 @@ const ClientRequest = ({
       meeting: [],
       wratingstatus: 0,
     };
-    console.log(clientName);
 
     try {
-      // Store in the booking collection
       await addDoc(collection(db, "booking"), bookingData);
-      // Clear fields or redirect after successful submission
       setSelectedService("");
       setDescription("");
       setSelectedWorkerId(null);
@@ -167,6 +163,15 @@ const ClientRequest = ({
       {showWorkers && (
         <>
           <h4>Available Workers</h4>
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Search workers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+            />
+          </div>
           <table className="table">
             <thead>
               <tr>
@@ -176,21 +181,29 @@ const ClientRequest = ({
               </tr>
             </thead>
             <tbody>
-              {workers.map((worker) => (
-                <tr key={worker.id}>
-                  <td>{worker.data().name}</td>
-                  <td>{worker.data().address}</td>
-                  <td>
-                    <input
-                      type="radio"
-                      id={worker.id}
-                      name="worker"
-                      value={worker.id}
-                      onChange={(e) => setSelectedWorkerId(e.target.value)}
-                    />
-                  </td>
-                </tr>
-              ))}
+              {workers
+                .filter((worker) => {
+                  const data = worker.data();
+                  const combinedFields = `${data.name} ${data.address} ${
+                    data.email || ""
+                  } ${data.contact || ""}`.toLowerCase();
+                  return combinedFields.includes(searchTerm);
+                })
+                .map((worker) => (
+                  <tr key={worker.id}>
+                    <td>{worker.data().name}</td>
+                    <td>{worker.data().address}</td>
+                    <td>
+                      <input
+                        type="radio"
+                        id={worker.id}
+                        name="worker"
+                        value={worker.id}
+                        onChange={(e) => setSelectedWorkerId(e.target.value)}
+                      />
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
           <div className="text-center mb-5">

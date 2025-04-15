@@ -29,11 +29,7 @@ const WorkerAccept = () => {
   // Fetch in-progress requests from Firebase
   useEffect(() => {
     const fetchRequests = async () => {
-      const q = query(
-        collection(db, "booking"),
-        where("wid", "==", workerId),
-        where("status", "==", "In-Progress")
-      );
+      const q = query(collection(db, "booking"), where("wid", "==", workerId));
       const querySnapshot = await getDocs(q);
       const requestsList = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -107,7 +103,7 @@ const WorkerAccept = () => {
         className="text-center mb-4"
         style={{ fontWeight: "bold", color: "#5E11A2" }}
       >
-        Accepted Requests
+        Completed Requests
       </h2>
 
       <Table striped bordered hover>
@@ -125,12 +121,6 @@ const WorkerAccept = () => {
             </th>
             <th style={{ backgroundColor: "#5E11A2", color: "white" }}>
               Description
-            </th>
-            <th style={{ backgroundColor: "#5E11A2", color: "white" }}>
-              Last Meeting
-            </th>
-            <th style={{ backgroundColor: "#5E11A2", color: "white" }}>
-              Schedule Meeting
             </th>
             <th style={{ backgroundColor: "#5E11A2", color: "white" }}>
               Complete
@@ -162,27 +152,12 @@ const WorkerAccept = () => {
                     {request.description}
                   </td>
                   <td style={{ backgroundColor: "#f2e7fe", color: "black" }}>
-                    {lastMeeting}
-                  </td>
-                  <td style={{ backgroundColor: "#f2e7fe", color: "black" }}>
-                    <i
-                      className="bi bi-calendar-event-fill"
-                      style={{
-                        fontSize: "1.5rem",
-                        cursor: "pointer",
-                        color: "#6200EE",
-                      }}
-                      onClick={() => handleMeetingClick(request)}
-                    ></i>
-                  </td>
-                  <td style={{ backgroundColor: "#f2e7fe", color: "black" }}>
                     <Button
                       variant="success"
                       style={{
                         backgroundColor: "#28a745",
                         borderColor: "#28a745",
                       }}
-                      onClick={() => handleComplete(request.id)}
                     >
                       Complete
                     </Button>
@@ -193,7 +168,7 @@ const WorkerAccept = () => {
           ) : (
             <tr>
               <td colSpan="8" className="text-center">
-                No Accepted Requests
+                No Completed Requests
               </td>
             </tr>
           )}

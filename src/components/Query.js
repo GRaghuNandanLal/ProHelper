@@ -105,13 +105,13 @@ const Query = () => {
             >
               <div className="card-body">
                 <h5 className="card-title" style={{ color: "#5E11A2" }}>
-                  Question:
+                  <span style={{ display: "inline" }}>Q:</span>{" "}
+                  <span>{query.Q}</span>
                 </h5>
-                <p>{query.Q}</p>
-                <h5 className="card-title" style={{ color: "#5E11A2" }}>
-                  Answer:
-                </h5>
-                <p>{query.A || "Not yet answered"}</p>
+                <span className="card-title" style={{ color: "#5E11A2" }}>
+                  <h5 style={{ display: "inline" }}>A:</h5>{" "}
+                  <span>{query.A || "Not yet answered"}</span>
+                </span>
               </div>
             </div>
           </div>

@@ -51,6 +51,37 @@ const WorkerHome = () => {
                 </div>
               </div>
 
+              {/* Card 3 - Check Meeting */}
+              <div className="col-md-4 mb-4">
+                <div className="card card-stats mb-4">
+                  <img
+                    src="https://media.istockphoto.com/id/1491193003/vector/business-meeting.jpg?s=612x612&w=0&k=20&c=fcb67xBiplttv25_Z190Qu6C-wbkNkUv_cwufFdg7xc="
+                    alt="Check Meeting"
+                    height="300px"
+                  />
+                  <div className="card-body">
+                    <span
+                      className="h2 font-weight-bold mb-0"
+                      style={{ fontWeight: "bold", color: "#5E11A2" }}
+                    >
+                      Upcoming Meeting
+                    </span>
+                    <div className="mt-3 mb-0 text-muted text-sm text-end">
+                      <Button
+                        style={{
+                          backgroundColor: "#6616B1",
+                          borderColor: "#6616B1",
+                          color: "white",
+                        }}
+                        onClick={() => navigate("/worker-meeting")}
+                      >
+                        View Meetings
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Card 2 - Current Request */}
               <div className="col-md-4">
                 <div className="card card-stats mb-4">
@@ -76,6 +107,37 @@ const WorkerHome = () => {
                         onClick={() => navigate("/worker-accept")}
                       >
                         View Current Requests
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2 - Completed Request */}
+              <div className="col-md-4">
+                <div className="card card-stats mb-4">
+                  <img
+                    src="https://cdni.iconscout.com/illustration/premium/thumb/woman-filing-refund-request-illustration-download-in-svg-png-gif-file-formats--work-business-female-employee-daily-lifestyle-pack-people-illustrations-2817551.png"
+                    alt="Completed Request"
+                    height="300px"
+                  />
+                  <div className="card-body">
+                    <span
+                      className="h2 font-weight-bold mb-0"
+                      style={{ fontWeight: "bold", color: "#5E11A2" }}
+                    >
+                      Completed Request
+                    </span>
+                    <div className="mt-3 mb-0 text-muted text-sm text-end">
+                      <Button
+                        style={{
+                          backgroundColor: "#6616B1",
+                          borderColor: "#6616B1",
+                          color: "white",
+                        }}
+                        onClick={() => navigate("/worker-completed")}
+                      >
+                        View Completed Requests
                       </Button>
                     </div>
                   </div>

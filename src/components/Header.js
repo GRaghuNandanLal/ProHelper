@@ -49,7 +49,18 @@ const Header = () => {
     >
       <div>
         <h3 style={{ fontWeight: "bold", color: "white" }}>
-          <img src="logo.png" alt="logo" height="75px" />
+          <img
+            src="logo.png"
+            alt="logo"
+            height="75px"
+            onClick={() => {
+              if (role === "Client") {
+                navigate("/client-home");
+              } else {
+                navigate("/worker-home");
+              }
+            }}
+          />
         </h3>
       </div>
       <div className="d-flex align-items-center">
@@ -77,6 +88,13 @@ const Header = () => {
 
         {isLoggedIn && (
           <>
+            <Link
+              to="/query"
+              className="text-light mr-3"
+              style={{ textDecoration: "none", marginRight: "30px" }}
+            >
+              <b>Queries</b>
+            </Link>
             <Link
               to="/edit"
               className="text-light mr-3"
