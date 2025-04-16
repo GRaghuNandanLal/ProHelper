@@ -39,6 +39,15 @@ const Signup = () => {
     e.preventDefault();
     setError("");
 
+    // Password validation
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError(
+        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
+      );
+      return;
+    }
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
@@ -167,7 +176,7 @@ const Signup = () => {
               </div>
               <button
                 type="button"
-                className="btn btn-secondary mb-3 "
+                className="btn btn-secondary mb-3"
                 onClick={handleAddService}
               >
                 Add Service

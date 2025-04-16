@@ -1,11 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import Button from "react-bootstrap/Button";
 
 const WorkerHome = () => {
   const navigate = useNavigate();
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
+
   const storedUserData = JSON.parse(sessionStorage.getItem("userData"));
-  const { name } = storedUserData || {};
+  const { name, id } = storedUserData || {};
+
+  const db = getFirestore();
+
+  useEffect(() => {
+    const fetchUnreadNotifications = async () => {
+      const notificationRef = collection(db, "notifications");
+      const q = query(
+        notificationRef,
+        where("userId", "==", id),
+        where("status", "==", "unread")
+      );
+      const querySnapshot = await getDocs(q);
+
+      setUnreadNotificationsCount(querySnapshot.size);
+    };
+
+    fetchUnreadNotifications();
+  }, [db, id]);
 
   return (
     <div className="main-content fullContainer">
@@ -51,37 +78,6 @@ const WorkerHome = () => {
                 </div>
               </div>
 
-              {/* Card 3 - Check Meeting */}
-              <div className="col-md-4 mb-4">
-                <div className="card card-stats mb-4">
-                  <img
-                    src="https://media.istockphoto.com/id/1491193003/vector/business-meeting.jpg?s=612x612&w=0&k=20&c=fcb67xBiplttv25_Z190Qu6C-wbkNkUv_cwufFdg7xc="
-                    alt="Check Meeting"
-                    height="300px"
-                  />
-                  <div className="card-body">
-                    <span
-                      className="h2 font-weight-bold mb-0"
-                      style={{ fontWeight: "bold", color: "#5E11A2" }}
-                    >
-                      Upcoming Meeting
-                    </span>
-                    <div className="mt-3 mb-0 text-muted text-sm text-end">
-                      <Button
-                        style={{
-                          backgroundColor: "#6616B1",
-                          borderColor: "#6616B1",
-                          color: "white",
-                        }}
-                        onClick={() => navigate("/worker-meeting")}
-                      >
-                        View Meetings
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Card 2 - Current Request */}
               <div className="col-md-4">
                 <div className="card card-stats mb-4">
@@ -113,7 +109,7 @@ const WorkerHome = () => {
                 </div>
               </div>
 
-              {/* Card 2 - Completed Request */}
+              {/* Card 3 - Completed Request */}
               <div className="col-md-4">
                 <div className="card card-stats mb-4">
                   <img
@@ -144,7 +140,74 @@ const WorkerHome = () => {
                 </div>
               </div>
 
-              {/* Card 3 - Reviews */}
+              {/* Card 4 - Notification Card */}
+              <div className="col-md-4 mb-4">
+                <div className="card card-stats mb-4">
+                  <img
+                    src="https://img.freepik.com/free-vector/push-notifications-concept-illustration_114360-4730.jpg"
+                    alt="Request"
+                    height="300px"
+                  />
+                  <div className="card-body">
+                    <span
+                      className="h2 font-weight-bold mb-0"
+                      style={{ fontWeight: "bold", color: "#5E11A2" }}
+                    >
+                      Notifications
+                    </span>
+                    <div className="mt-3 mb-0 text-muted text-sm text-end">
+                      <Button
+                        style={{
+                          backgroundColor: "#6616B1",
+                          borderColor: "#6616B1",
+                          color: "white",
+                        }}
+                        onClick={() => navigate("/notifications")}
+                      >
+                        View Notifications
+                        {unreadNotificationsCount > 0 && (
+                          <span className="badge bg-danger ms-2">
+                            {unreadNotificationsCount}
+                          </span>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 5 - Check Meeting */}
+              <div className="col-md-4 mb-4">
+                <div className="card card-stats mb-4">
+                  <img
+                    src="https://media.istockphoto.com/id/1491193003/vector/business-meeting.jpg?s=612x612&w=0&k=20&c=fcb67xBiplttv25_Z190Qu6C-wbkNkUv_cwufFdg7xc="
+                    alt="Check Meeting"
+                    height="300px"
+                  />
+                  <div className="card-body">
+                    <span
+                      className="h2 font-weight-bold mb-0"
+                      style={{ fontWeight: "bold", color: "#5E11A2" }}
+                    >
+                      Upcoming Meeting
+                    </span>
+                    <div className="mt-3 mb-0 text-muted text-sm text-end">
+                      <Button
+                        style={{
+                          backgroundColor: "#6616B1",
+                          borderColor: "#6616B1",
+                          color: "white",
+                        }}
+                        onClick={() => navigate("/worker-meeting")}
+                      >
+                        View Meetings
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 6 - Reviews */}
               <div className="col-md-4">
                 <div className="card card-stats mb-4">
                   <img

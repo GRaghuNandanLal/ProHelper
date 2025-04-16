@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../firebase"; // adjust based on your Firebase config
+import { db } from "../firebase";
 
 const WorkerHistory = () => {
   const navigate = useNavigate();
   const [completedServices, setCompletedServices] = useState([]);
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
 
   const storedUserData = JSON.parse(sessionStorage.getItem("userData"));
   const userId = storedUserData.id;
@@ -36,12 +37,24 @@ const WorkerHistory = () => {
       setCompletedServices(services);
     };
 
+    const fetchUnreadNotifications = async () => {
+      const notificationRef = collection(db, "notifications");
+      const q = query(
+        notificationRef,
+        where("userId", "==", userId),
+        where("status", "==", "unread")
+      );
+      const querySnapshot = await getDocs(q);
+
+      setUnreadNotificationsCount(querySnapshot.size);
+    };
+
     fetchCompletedServices();
+    fetchUnreadNotifications();
   }, [userId]);
 
   return (
     <div className="container mt-4">
-      {/* Back Button */}
       <i
         className="bi bi-arrow-left-circle-fill"
         style={{
@@ -53,12 +66,16 @@ const WorkerHistory = () => {
         onClick={() => navigate("/worker-home")}
       ></i>
 
-      {/* Heading */}
       <h2
         className="text-center my-4"
         style={{ fontWeight: "bold", color: "#5E11A2" }}
       >
         Completed Service
+        {unreadNotificationsCount > 0 && (
+          <span className="badge bg-danger ms-2">
+            {unreadNotificationsCount}
+          </span>
+        )}
       </h2>
 
       {/* Table */}

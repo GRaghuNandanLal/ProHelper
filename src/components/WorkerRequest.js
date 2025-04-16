@@ -7,6 +7,7 @@ import {
   getDocs,
   updateDoc,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase"; // assuming firebase is configured in this file
 import { Modal, Button, Table } from "react-bootstrap";
@@ -44,12 +45,39 @@ const WorkerRequest = () => {
   const handleAction = async (requestId, newStatus) => {
     const requestRef = doc(db, "booking", requestId);
     await updateDoc(requestRef, { status: newStatus });
+
+    // Set modal message based on action
     setModalMessage(
       newStatus === "In-Progress"
         ? "Successfully accepted!"
         : "Successfully rejected!"
     );
     setShowModal(true);
+
+    // Get the request data to send notifications
+    const requestDoc = await getDocs(doc(db, "booking", requestId));
+    const request = requestDoc.data();
+
+    // Send notification to the client
+    const notificationRef = collection(db, "notifications");
+    await setDoc(doc(notificationRef), {
+      userId: request.cid, // Client's ID
+      message: `Your service request for ${request.service} has been ${
+        newStatus === "In-Progress" ? "accepted" : "rejected"
+      } by ${storedUserData.name}.`,
+      status: "unread",
+      timestamp: new Date(),
+    });
+
+    // Send notification to the worker
+    await setDoc(doc(notificationRef), {
+      userId: workerId, // Worker’s ID
+      message: `You have ${
+        newStatus === "In-Progress" ? "accepted" : "rejected"
+      } the request for ${request.cname}.`,
+      status: "unread",
+      timestamp: new Date(),
+    });
   };
 
   // Close modal and refresh page

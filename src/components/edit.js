@@ -6,6 +6,7 @@ import {
   getDoc,
   collection,
   getDocs,
+  addDoc,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
@@ -85,11 +86,30 @@ const Edit = () => {
 
         await updateDoc(userRef, updatedData);
 
+        // Send a notification to the user
+        await addNotification(
+          user.uid,
+          "Your profile has been updated successfully!"
+        );
+
         // Navigate to the correct home screen based on role
         handleBack();
       }
     } catch (error) {
       setError("Failed to update profile. Please try again.");
+    }
+  };
+
+  const addNotification = async (userId, message) => {
+    try {
+      await addDoc(collection(db, "notifications"), {
+        userId,
+        message,
+        timestamp: new Date(),
+        read: false, // Initially unread
+      });
+    } catch (error) {
+      console.error("Error adding notification: ", error);
     }
   };
 

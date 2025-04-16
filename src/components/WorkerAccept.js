@@ -7,6 +7,7 @@ import {
   getDocs,
   updateDoc,
   doc,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase"; // assuming firebase is configured in this file
 import { Table, Button, Modal, Form } from "react-bootstrap";
@@ -74,6 +75,15 @@ const WorkerAccept = () => {
       const requestRef = doc(db, "booking", selectedRequest.id);
       await updateDoc(requestRef, { meeting: updatedMeetingArray });
 
+      // Send notification to client (assuming `wid` is the worker's id, and `cid` is the client's id)
+      const notificationRef = collection(db, "notifications");
+      await setDoc(doc(notificationRef), {
+        userId: selectedRequest.cid, // Client's ID
+        message: `Your meeting with ${storedUserData.name} has been scheduled for ${formattedDate}`,
+        status: "unread",
+        timestamp: new Date(),
+      });
+
       // Close modal and refresh data
       setShowModal(false);
       window.location.reload(); // Refresh the page after successful submission
@@ -84,6 +94,25 @@ const WorkerAccept = () => {
   const handleComplete = async (requestId) => {
     const requestRef = doc(db, "booking", requestId);
     await updateDoc(requestRef, { status: "Complete" });
+
+    // Send notification to both client and worker
+    const request = requests.find((r) => r.id === requestId);
+
+    // Notification to worker
+    await setDoc(doc(collection(db, "notifications")), {
+      userId: workerId, // Worker’s ID
+      message: `You have completed the request for ${request.cname}.`,
+      status: "unread",
+      timestamp: new Date(),
+    });
+
+    // Notification to client
+    await setDoc(doc(collection(db, "notifications")), {
+      userId: request.cid, // Client’s ID
+      message: `Your request with ${request.wname} has been marked as complete.`,
+      status: "unread",
+      timestamp: new Date(),
+    });
 
     // Show success popup after status update
     setShowCompleteModal(true);

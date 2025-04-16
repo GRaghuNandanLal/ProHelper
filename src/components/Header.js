@@ -56,8 +56,10 @@ const Header = () => {
             onClick={() => {
               if (role === "Client") {
                 navigate("/client-home");
-              } else {
+              } else if (role === "Worker") {
                 navigate("/worker-home");
+              } else {
+                navigate("admin-home");
               }
             }}
           />

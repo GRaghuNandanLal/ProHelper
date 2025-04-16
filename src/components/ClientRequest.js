@@ -92,6 +92,18 @@ const ClientRequest = ({
 
     try {
       await addDoc(collection(db, "booking"), bookingData);
+
+      // Create a notification for the worker
+      const notification = {
+        workerId: selectedWorkerId,
+        message: `You have a new service request from ${storedUserData.name} for ${selectedService}. Description: ${description}`,
+        timestamp: new Date(),
+        seen: false, // Initially, the notification is not seen
+      };
+
+      // Save the notification to Firestore in the notifications collection
+      await addDoc(collection(db, "notifications"), notification);
+
       setSelectedService("");
       setDescription("");
       setSelectedWorkerId(null);

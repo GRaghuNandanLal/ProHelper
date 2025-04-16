@@ -30,6 +30,7 @@ import Edit from "./components/edit";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "react-bootstrap";
 import "./App.css";
+import NotificationsPage from "./components/NotificationPage";
 
 const App = () => {
   return (
@@ -60,6 +61,7 @@ const App = () => {
         <Route path="/query" element={<Query />} />
         <Route path="/admin-query" element={<AdminQuerys />} />
         <Route path="/edit" element={<Edit />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
         <Route
           path="/forgot-password"
           element={<div>Forgot Password Page</div>}

@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { getFirestore, doc, updateDoc, getDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  updateDoc,
+  getDoc,
+  collection,
+  addDoc,
+} from "firebase/firestore";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Rating = () => {
@@ -9,7 +16,6 @@ const Rating = () => {
 
   // Get the booking ID, worker ID, and service from state
   const { bookingId, workerId, service } = location.state;
-  console.log(bookingId, workerId, service);
 
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
@@ -57,6 +63,17 @@ const Rating = () => {
         await updateDoc(bookingRef, {
           wratingstatus: 1,
         });
+
+        // Create a notification for the worker
+        const notification = {
+          workerId: workerId,
+          message: `You received a new rating for the service: ${service}. Rating: ${rating}/5. Review: ${review}`,
+          timestamp: new Date(),
+          seen: false, // Initially, the notification is not seen
+        };
+
+        // Save the notification to Firestore in the notifications collection
+        await addDoc(collection(db, "notifications"), notification);
 
         // Redirect to /client-service
         navigate("/client-service");

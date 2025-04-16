@@ -6,17 +6,16 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import moment from "moment"; // To handle date comparison
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css"; // Import Bootstrap icons
 
 const WorkerMeeting = () => {
   const [bookings, setBookings] = useState([]);
+  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(0);
   const db = getFirestore();
   const navigate = useNavigate();
 
-  // Retrieve worker ID from session storage
   const storedUserData = JSON.parse(sessionStorage.getItem("userData"));
   const workerId = storedUserData.id;
 
@@ -31,15 +30,12 @@ const WorkerMeeting = () => {
           .map((doc) => {
             const bookingData = doc.data();
 
-            // Filter meetings to only include future dates or today
             const upcomingMeetings = bookingData.meeting.filter((meeting) => {
               const meetingDate = moment(meeting, "DD-MM-YYYY HH:mm");
               return meetingDate.isSameOrAfter(moment(), "day");
             });
 
-            // Only keep bookings that have at least one valid future meeting date
             if (upcomingMeetings.length > 0) {
-              // Sort meetings in ascending order and keep the latest valid date
               const latestMeeting = upcomingMeetings.sort(
                 (a, b) =>
                   moment(a, "DD-MM-YYYY HH:mm") - moment(b, "DD-MM-YYYY HH:mm")
@@ -53,9 +49,9 @@ const WorkerMeeting = () => {
                 meeting: latestMeeting,
               };
             }
-            return null; // Exclude bookings with no future meetings
+            return null;
           })
-          .filter((booking) => booking !== null); // Filter out null values
+          .filter((booking) => booking !== null);
 
         setBookings(fetchedBookings);
       } catch (error) {
@@ -63,12 +59,24 @@ const WorkerMeeting = () => {
       }
     };
 
+    const fetchUnreadNotifications = async () => {
+      const notificationRef = collection(db, "notifications");
+      const q = query(
+        notificationRef,
+        where("userId", "==", workerId),
+        where("status", "==", "unread")
+      );
+      const querySnapshot = await getDocs(q);
+
+      setUnreadNotificationsCount(querySnapshot.size);
+    };
+
     fetchBookings();
+    fetchUnreadNotifications();
   }, [db, workerId]);
 
   return (
     <div className="container mt-5">
-      {/* Back Arrow Icon */}
       <i
         className="bi bi-arrow-left-circle-fill"
         style={{
@@ -85,6 +93,11 @@ const WorkerMeeting = () => {
         style={{ fontWeight: "bold", color: "#5E11A2" }}
       >
         Meetings
+        {unreadNotificationsCount > 0 && (
+          <span className="badge bg-danger ms-2">
+            {unreadNotificationsCount}
+          </span>
+        )}
       </h2>
 
       {bookings.length > 0 ? (
